@@ -2,7 +2,7 @@ const pool = require('../config/db');
 
 // Create bill with items in transaction
 const createBill = async (billData, items) => {
-    const { bill_number, customer_name, customer_address, customer_phone, payment_type, total_price, discount_amount, net_price, user_id } = billData;
+    const { bill_number, customer_name, customer_nic, customer_phone, payment_type, total_price, discount_amount, net_price, user_id } = billData;
 
     // Importing models for ID-based lookups
     const productModel = require('./productModel');
@@ -45,8 +45,8 @@ const createBill = async (billData, items) => {
 
         // 2. Insert bill
         const [billResult] = await connection.query(
-            'INSERT INTO bill (bill_number, customer_name, customer_address, customer_phone, payment_type, total_price, discount_amount, net_price, is_paid, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [bill_number, customer_name, customer_address, customer_phone, payment_type, total_price, discount_amount, net_price, is_paid, user_id]
+            'INSERT INTO bill (bill_number, customer_name, customer_nic, customer_phone, payment_type, total_price, discount_amount, net_price, is_paid, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [bill_number, customer_name, customer_nic, customer_phone, payment_type, total_price, discount_amount, net_price, is_paid, user_id]
         );
 
         const billId = billResult.insertId;
@@ -153,7 +153,7 @@ const updatePaymentStatus = async (id, isPaid) => {
 // Update bill (only if unpaid)
 // Update bill (only if unpaid)
 const updateBill = async (id, billData, items) => {
-    const { customer_name, customer_address, customer_phone, total_price, discount_amount, net_price } = billData;
+    const { customer_name, customer_nic, customer_phone, total_price, discount_amount, net_price } = billData;
 
     // Import models here to avoid circular dependency issues if any, or just for clarity
     const productModel = require('./productModel');
@@ -208,8 +208,8 @@ const updateBill = async (id, billData, items) => {
 
         // 3. Update bill details
         await connection.query(
-            'UPDATE bill SET customer_name = ?, customer_address = ?, customer_phone = ?, total_price = ?, discount_amount = ?, net_price = ? WHERE id = ?',
-            [customer_name, customer_address, customer_phone, total_price, discount_amount, net_price, id]
+            'UPDATE bill SET customer_name = ?, customer_nic = ?, customer_phone = ?, total_price = ?, discount_amount = ?, net_price = ? WHERE id = ?',
+            [customer_name, customer_nic, customer_phone, total_price, discount_amount, net_price, id]
         );
         // Removed 'AND is_paid = FALSE' check to allow editing details even if paid (per user request implies flexibility), but usually editing bills suggests recalculation.
         // Wait, user said "if edit, stock need to increase/decrease". If it's paid, editing amount might be weird.

@@ -28,7 +28,7 @@ const SellsTab = () => {
     const [billItems, setBillItems] = useState([]);
 
     // New States
-    const [customerDetails, setCustomerDetails] = useState({ name: '', address: '', phone: '' });
+    const [customerDetails, setCustomerDetails] = useState({ name: '', nic: '', phone: '' });
     const [paymentMethod, setPaymentMethod] = useState('cash');
 
     const handleSubTabChange = (event, newValue) => {
@@ -44,7 +44,15 @@ const SellsTab = () => {
     };
 
     const handleCustomerChange = (e) => {
-        setCustomerDetails({ ...customerDetails, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === 'phone') {
+            const onlyNums = value.replace(/[^0-9]/g, '');
+            if (onlyNums.length <= 10) {
+                setCustomerDetails({ ...customerDetails, [name]: onlyNums });
+            }
+        } else {
+            setCustomerDetails({ ...customerDetails, [name]: value });
+        }
     };
 
     // Calculate Totals
@@ -59,7 +67,7 @@ const SellsTab = () => {
         const billData = {
             bill_number: billNumber,
             customer_name: customerDetails.name,
-            customer_address: customerDetails.address,
+            customer_nic: customerDetails.nic,
             customer_phone: customerDetails.phone,
             payment_type: paymentMethod,
             total_price: totalPrice,
@@ -90,9 +98,14 @@ const SellsTab = () => {
     const handleGenerateBill = async () => {
         if (billItems.length === 0) return toast.warning("No items in bill");
 
-        // ONLY validate customer name if payment method is CREDIT
-        if (paymentMethod === 'credit' && !customerDetails.name) {
-            return toast.warning("Customer Name is required for Credit sales");
+        // validate customer name, nic,phone number if payment method is CREDIT
+        if (paymentMethod === 'credit') {
+            if (!customerDetails.name.trim()) return toast.warning("Customer Name is required for Credit sales");
+            if (!customerDetails.nic.trim()) return toast.warning("Customer ID (NIC) is required for Credit sales");
+            if (!customerDetails.phone.trim()) return toast.warning("Customer Phone is required for Credit sales");
+            if (customerDetails.phone.length !== 10) {
+                return toast.warning("Phone number must be exactly 10 digits");
+            }
         }
 
         const doc = new jsPDF();
@@ -104,7 +117,7 @@ const SellsTab = () => {
         doc.setFontSize(10);
         doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 30);
         if (customerDetails.name) doc.text(`Bill To: ${customerDetails.name}`, 14, 35);
-        if (customerDetails.address) doc.text(`Address: ${customerDetails.address}`, 14, 40);
+        if (customerDetails.nic) doc.text(`NIC: ${customerDetails.nic}`, 14, 40);
         if (customerDetails.phone) doc.text(`Phone: ${customerDetails.phone}`, 14, 45);
         doc.text(`Payment Method: ${paymentMethod.toUpperCase()}`, 14, 55);
 
@@ -146,7 +159,7 @@ const SellsTab = () => {
 
         // Clear bill items and customer details
         setBillItems([]);
-        setCustomerDetails({ name: '', address: '', phone: '' });
+        setCustomerDetails({ name: '', nic: '', phone: '' });
     };
 
     return (
@@ -225,10 +238,10 @@ const SellsTab = () => {
                                 <TextField fullWidth label="Customer Name" name="name" value={customerDetails.name} onChange={handleCustomerChange} size="small" variant="outlined" />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField fullWidth label="Customer Address" name="address" value={customerDetails.address} onChange={handleCustomerChange} size="small" variant="outlined" />
+                                <TextField fullWidth label="Customer NIC(ID)" name="nic" value={customerDetails.nic} onChange={handleCustomerChange} size="small" variant="outlined" />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField fullWidth label="Customer Phone" name="phone" value={customerDetails.phone} onChange={handleCustomerChange} size="small" variant="outlined" />
+                                <TextField fullWidth label="Customer Phone" name="phone" value={customerDetails.phone} onChange={handleCustomerChange} size="small" variant="outlined" required={paymentMethod === 'credit'} inputProps={{ maxLength: 10 }} helperText={customerDetails.phone && customerDetails.phone.length !== 10 ? "Must be 10 digits" : ""} error={customerDetails.phone.length > 0 && customerDetails.phone.length !== 10} />
                             </Grid>
                         </Grid>
                     </Box>
