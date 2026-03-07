@@ -51,6 +51,8 @@ const Employees = () => {
         id: '',
         first_name: '',
         last_name: '',
+        email: '',      
+        password: '',   
         phone_number: '',
         status: ''
     });
@@ -135,6 +137,8 @@ const Employees = () => {
             id: employee.id,
             first_name: employee.first_name || '',
             last_name: employee.last_name || '',
+            email: employee.email || '', // Populate current email
+            password: '',                // Keep password empty initially
             phone_number: employee.phone_number || '',
             status: employee.status || 'active'
         });
@@ -301,6 +305,20 @@ const Employees = () => {
                             fullWidth
                             value={editEmployeeData.last_name}
                             onChange={(e) => setEditEmployeeData({ ...editEmployeeData, last_name: e.target.value })}
+                        />
+                        <TextField
+                            label="Email (Username)"
+                            fullWidth
+                            value={editEmployeeData.email}
+                            onChange={(e) => setEditEmployeeData({ ...editEmployeeData, email: e.target.value })}
+                        />
+                        <TextField
+                            label="Reset Password"
+                            type="password"
+                            placeholder="Leave blank to keep current password"
+                            fullWidth
+                            value={editEmployeeData.password}
+                            onChange={(e) => setEditEmployeeData({ ...editEmployeeData, password: e.target.value })}
                         />
                         <TextField
                             label="Phone Number"

@@ -50,6 +50,15 @@ const updateUser = async (id, userData) => {
         fields.push('profile_image = ?');
         params.push(profile_image);
     }
+    if (email !== undefined) {
+        fields.push('email = ?');
+        params.push(email);
+    }
+    if (password_hash !== undefined) {
+        fields.push('password_hash = ?');
+        params.push(password_hash);
+    }
+
     if (recovery_email !== undefined) {
         fields.push('recovery_email = ?');
         params.push(recovery_email);

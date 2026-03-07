@@ -28,7 +28,15 @@ const getUserById = async (id) => {
 };
 
 const updateUser = async (id, userData) => {
-    await userModel.updateUser(id, userData);
+    const updateData = { ...userData };
+    
+    // If a new password is provided, hash it before saving
+    if (updateData.password) {
+        updateData.password_hash = await hashPassword(updateData.password);
+        delete updateData.password; // Remove plain text password
+    }
+
+    await userModel.updateUser(id, updateData);
     return { message: 'User updated' };
 };
 
