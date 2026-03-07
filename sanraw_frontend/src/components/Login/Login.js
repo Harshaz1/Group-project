@@ -85,7 +85,8 @@ const StyledInput = styled(TextField)({
         }
     },
     '& input': {
-        textAlign: 'center',
+        textAlign: 'left',
+        paddingLeft: '25px',
         fontSize: '1rem',
         color: '#4B5563',
     },
