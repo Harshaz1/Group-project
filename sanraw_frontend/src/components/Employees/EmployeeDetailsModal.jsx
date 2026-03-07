@@ -66,7 +66,7 @@ const EmployeeDetailsModal = ({ open, onClose, employee, onViewHistory, onEdit, 
                     variant="contained"
                     onClick={() => onViewHistory(employee.id)}
                     sx={{
-                        bgcolor: '#98FB98', color: 'white', mb: 2, borderRadius: '20px', textTransform: 'none',
+                        bgcolor: '#98FB98', color: '#000', mb: 2, borderRadius: '20px', textTransform: 'none',
                         '&:hover': { bgcolor: '#7ddba4' }
                     }}
                 >
@@ -79,7 +79,7 @@ const EmployeeDetailsModal = ({ open, onClose, employee, onViewHistory, onEdit, 
                         variant="contained"
                         onClick={() => onEdit(employee)}
                         sx={{
-                            bgcolor: '#98FB98', color: 'white', borderRadius: '20px', textTransform: 'none',
+                            bgcolor: '#98FB98', color: '#000', borderRadius: '20px', textTransform: 'none',
                             '&:hover': { bgcolor: '#7ddba4' }
                         }}
                     >
@@ -90,7 +90,7 @@ const EmployeeDetailsModal = ({ open, onClose, employee, onViewHistory, onEdit, 
                         variant="contained"
                         onClick={() => onDelete(employee.id)}
                         sx={{
-                            bgcolor: '#98FB98', color: 'white', borderRadius: '20px', textTransform: 'none',
+                            bgcolor: '#98FB98', color: '#000', borderRadius: '20px', textTransform: 'none',
                             '&:hover': { bgcolor: '#7ddba4' }
                         }}
                     >
