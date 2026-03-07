@@ -321,7 +321,7 @@ const Inventory = () => {
 
                     <TextField 
                         required type="number" 
-                        label="Price" 
+                        label="Price (LKR)" 
                         fullWidth 
                         value={formData.price} 
                         onChange={(e) => {
