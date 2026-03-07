@@ -46,6 +46,14 @@ const Employees = () => {
     const [employeeToDelete, setEmployeeToDelete] = useState(null);
     const [employeeHistory, setEmployeeHistory] = useState([]);
     const [historyModalOpen, setHistoryModalOpen] = useState(false);
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+    const [editEmployeeData, setEditEmployeeData] = useState({
+        id: '',
+        first_name: '',
+        last_name: '',
+        phone_number: '',
+        status: ''
+    });
 
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -123,10 +131,40 @@ const Employees = () => {
     };
 
     const handleEdit = (employee) => {
-        // Logic to open edit modal or navigate to edit page.
-        // For now, reusing Profile Logic is complex without a reusable component.
-        // Let's just show a toast as "Feature coming soon" or simple prompt for V1
-        toast.info("Edit feature integration pending.");
+        setEditEmployeeData({
+            id: employee.id,
+            first_name: employee.first_name || '',
+            last_name: employee.last_name || '',
+            phone_number: employee.phone_number || '',
+            status: employee.status || 'active'
+        });
+        setEditDialogOpen(true);
+    };
+
+    const handleSaveEmployeeEdit = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`${API_URL}/users/${editEmployeeData.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(editEmployeeData)
+            });
+    
+            if (response.ok) {
+                toast.success("Employee updated successfully");
+                setEditDialogOpen(false);
+                fetchEmployees(); // Refresh the list
+                handleCloseModal(); // Close the details modal if it was open
+            } else {
+                const data = await response.json();
+                toast.error(data.message || "Failed to update employee");
+            }
+        } catch (error) {
+            toast.error("Error updating employee details");
+        }
     };
 
     const handleViewHistory = async (id) => {
@@ -247,6 +285,49 @@ const Employees = () => {
                 onEdit={handleEdit}
                 onDelete={handleDeleteClick}
             />
+
+            <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} fullWidth maxWidth="xs">
+                <DialogTitle sx={{ fontWeight: 'bold' }}>Edit Employee Details</DialogTitle>
+                <DialogContent dividers>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
+                        <TextField
+                            label="First Name"
+                            fullWidth
+                            value={editEmployeeData.first_name}
+                            onChange={(e) => setEditEmployeeData({ ...editEmployeeData, first_name: e.target.value })}
+                        />
+                        <TextField
+                            label="Last Name"
+                            fullWidth
+                            value={editEmployeeData.last_name}
+                            onChange={(e) => setEditEmployeeData({ ...editEmployeeData, last_name: e.target.value })}
+                        />
+                        <TextField
+                            label="Phone Number"
+                            fullWidth
+                            value={editEmployeeData.phone_number}
+                            onChange={(e) => setEditEmployeeData({ ...editEmployeeData, phone_number: e.target.value })}
+                        />
+                        <TextField
+                            select
+                            label="Status"
+                            fullWidth
+                            SelectProps={{ native: true }}
+                            value={editEmployeeData.status}
+                            onChange={(e) => setEditEmployeeData({ ...editEmployeeData, status: e.target.value })}
+                        >
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </TextField>
+                    </Box>
+                </DialogContent>
+                <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                    <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+                    <Button variant="contained" onClick={handleSaveEmployeeEdit} sx={{ bgcolor: 'primary.main', color: 'white' }}>
+                        Save Changes
+                    </Button>
+                </Box>
+            </Dialog>
 
             <Dialog 
                 open={historyModalOpen} 

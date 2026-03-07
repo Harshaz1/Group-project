@@ -28,8 +28,12 @@ const getAllUsers = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
-        const { first_name, last_name, role } = req.body;
-        await userService.updateUser(id, { first_name, last_name, role });
+        // UPDATE THIS LINE to include phone_number and status
+        const { first_name, last_name, role, phone_number, status } = req.body; 
+        
+        // Pass the updated data to the service
+        await userService.updateUser(id, { first_name, last_name, role, phone_number, status });
+        
         res.json({ message: 'User updated successfully' });
     } catch (err) {
         res.status(400).json({ message: err.message });
