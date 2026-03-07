@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { Box, Typography, TextField, Button, Link } from '@mui/material';
+import { Box, Typography, TextField, Button, Link, InputAdornment, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/system';
 import logo from '../../assets/logo.png';
@@ -96,8 +97,11 @@ const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -165,10 +169,24 @@ const Login = () => {
 
                         <StyledInput
                             fullWidth
-                            type="password"
+                            type= {showPassword ? 'text' :"password"}
                             placeholder="Enter Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end" sx={{ mr: 1 }}>
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            edge="end"
+                                            sx={{ color: '#2E8B57' }}
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
 
                         <Box sx={{ textAlign: 'left', ml: 2, mt: -1 }}>
