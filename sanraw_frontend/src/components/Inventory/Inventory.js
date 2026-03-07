@@ -140,6 +140,10 @@ const Inventory = () => {
         else if (categoryTab === 'equipment') endpoint = '/equipment';
         else if (categoryTab === 'chemicals') endpoint = '/chemicals';
 
+        if (Number(formData.price) < 0 || Number(formData.stock) < 0) {
+            return toast.error("Price and Stock must be greater than 0");
+        }
+
         try {
             const res = await fetch(`${API_URL}${endpoint}`, {
                 method: 'POST',
@@ -182,6 +186,10 @@ const Inventory = () => {
         if (categoryTab === 'paddy') endpoint = `/paddy/${selectedItem.id}`;
         else if (categoryTab === 'equipment') endpoint = `/equipment/${selectedItem.id}`;
         else if (categoryTab === 'chemicals') endpoint = `/chemicals/${selectedItem.id}`;
+
+        if (Number(formData.price) < 0 || Number(formData.stock) < 0) {
+            return toast.error("Price and Stock must be greater than 0");
+        }
 
         try {
             const res = await fetch(`${API_URL}${endpoint}`, {
@@ -311,8 +319,31 @@ const Inventory = () => {
                         <TextField required label="Start Name (Fertilizer/Pesticide)" fullWidth value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                     }
 
-                    <TextField required type="number" label="Price" fullWidth value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
-                    <TextField required type="number" label={categoryTab === 'paddy' ? "Initial Stock (kg)" : "Initial Stock"} fullWidth value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} />
+                    <TextField 
+                        required type="number" 
+                        label="Price" 
+                        fullWidth 
+                        value={formData.price} 
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            if (val < 0) return;
+                            setFormData({ ...formData, price: val });
+                        }} 
+                        inputProps={{ min: 1, step: "0.01" }} 
+                    />
+
+                    <TextField 
+                        required type="number" 
+                        label={categoryTab === 'paddy' ? "Initial Stock (kg)" : "Initial Stock"} 
+                        fullWidth 
+                        value={formData.stock} 
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            if (val < 0) return; 
+                            setFormData({ ...formData, stock: val });
+                        }} 
+                        inputProps={{ min: 1, step: "0.01" }}
+                    />
 
                     {categoryTab === 'chemicals' &&
                         <TextField required type="date" label="Expire Date" InputLabelProps={{ shrink: true }} fullWidth value={formData.expire_date} onChange={(e) => setFormData({ ...formData, expire_date: e.target.value })} />
@@ -442,8 +473,27 @@ const Inventory = () => {
                                 helperText={userRole === 'employee' ? 'Only owners can edit names' : ''}
                             />
                         }
-                        <TextField label="Price" type="number" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} fullWidth />
-                        <TextField label={categoryTab === 'paddy' ? "Stock (kg)" : "Stock"} type="number" value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} fullWidth />
+                        <TextField 
+                            label="Price" 
+                            type="number" 
+                            value={formData.price} 
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val < 0) return;
+                                setFormData({ ...formData, price: val });
+                            }}
+                            fullWidth 
+                        />
+                        <TextField 
+                            label={categoryTab === 'paddy' ? "Stock (kg)" : "Stock"} 
+                            type="number" value={formData.stock} 
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val < 0) return;
+                                setFormData({ ...formData, stock: val });
+                            }}
+                            fullWidth 
+                        />
                         {categoryTab === 'chemicals' &&
                             <TextField label="Expire Date" type="date" InputLabelProps={{ shrink: true }} value={formData.expire_date} onChange={(e) => setFormData({ ...formData, expire_date: e.target.value })} fullWidth />
                         }
