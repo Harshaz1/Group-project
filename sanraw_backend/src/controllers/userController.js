@@ -92,6 +92,17 @@ const getLoginHistory = async (req, res) => {
     }
 };
 
+// Function to get history for a specific user (Owner only)
+const getUserLoginHistory = async (req, res) => {
+    try {
+        const { id } = req.params; // Get the employee ID from the URL
+        const history = await userService.getLoginHistory(id);
+        res.json(history);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
 const deleteLoginHistoryItem = async (req, res) => {
     try {
         await userService.deleteLoginHistory(req.params.id, req.user.id);
@@ -118,6 +129,7 @@ module.exports = {
     getProfile,
     updateProfile,
     getLoginHistory,
+    getUserLoginHistory,
     deleteLoginHistoryItem,
     clearMyHistory
 };

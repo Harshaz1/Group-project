@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, IconButton, Button, Container, TextField, Avatar, Tabs, Tab, CircularProgress, InputAdornment } from '@mui/material';
+import { Box, Typography, IconButton, Button, Container, TextField, Avatar, Tabs, Tab, CircularProgress, InputAdornment,Dialog,
+    DialogTitle,DialogContent } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -43,6 +44,8 @@ const Employees = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [employeeToDelete, setEmployeeToDelete] = useState(null);
+    const [employeeHistory, setEmployeeHistory] = useState([]);
+    const [historyModalOpen, setHistoryModalOpen] = useState(false);
 
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -126,13 +129,22 @@ const Employees = () => {
         toast.info("Edit feature integration pending.");
     };
 
-    const handleViewHistory = (id) => {
-        // In a real app, we'd pass this ID to the history page or fetch history for this specific user.
-        // Current LoginHistory page fetches "my" history (req.user.id).
-        // need to update backend to allow admin to view others history?
-        // Prompt says "pop up window... view login history button".
-        // For now, just a placeholder action.
-        toast.info("Viewing history for user " + id);
+    const handleViewHistory = async (id) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`${API_URL}/users/${id}/history`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setEmployeeHistory(data);
+                setHistoryModalOpen(true); // Open a modal to show history
+            } else {
+                toast.error("Could not fetch history");
+            }
+        } catch (error) {
+            toast.error("Error fetching history");
+        }
     };
 
     // Filter and Pagination
@@ -231,10 +243,40 @@ const Employees = () => {
                 open={modalOpen}
                 onClose={handleCloseModal}
                 employee={selectedEmployee}
-                onViewHistory={handleViewHistory}
+                onViewHistory={handleViewHistory} 
                 onEdit={handleEdit}
                 onDelete={handleDeleteClick}
             />
+
+            <Dialog 
+                open={historyModalOpen} 
+                onClose={() => setHistoryModalOpen(false)} 
+                fullWidth 
+                maxWidth="sm"
+            >
+                <DialogTitle sx={{ fontWeight: 'bold' }}>Employee Login History</DialogTitle>
+                <DialogContent dividers>
+                    {employeeHistory.length > 0 ? (
+                        employeeHistory.map((log) => (
+                            <Box key={log.id} sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #eee', pb: 1 }}>
+                                <Typography variant="body2">
+                                    {new Date(log.login_time).toLocaleDateString()} at {new Date(log.login_time).toLocaleTimeString()}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    Logout: {log.logout_time ? new Date(log.logout_time).toLocaleTimeString() : 'Still Active'}
+                                </Typography>
+                            </Box>
+                        ))
+                    ) : (
+                        <Typography align="center" sx={{ py: 3 }}>No history found for this employee.</Typography>
+                    )}
+                </DialogContent>
+                <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button onClick={() => setHistoryModalOpen(false)} variant="contained" color="primary">
+                        Close
+                    </Button>
+                </Box>
+            </Dialog>
 
             <ConfirmationDialog
                 open={deleteDialogOpen}
