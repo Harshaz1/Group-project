@@ -1,16 +1,16 @@
 const pool = require('../config/db');
 
 const createUser = async (userData) => {
-    const { first_name, last_name, email, password_hash, role, status, activation_token, activation_expires } = userData;
+    const { first_name, last_name, username, password_hash, role, status, activation_token, activation_expires } = userData;
     const [result] = await pool.query(
-        'INSERT INTO user (first_name, last_name, email, password_hash, role, status, activation_token, activation_expires) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [first_name, last_name, email, password_hash, role, status || 'inactive', activation_token, activation_expires]
+        'INSERT INTO user (first_name, last_name, username, password_hash, role, status, activation_token, activation_expires) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [first_name, last_name, username, password_hash, role, status || 'inactive', activation_token, activation_expires]
     );
     return result.insertId;
 };
 
-const findUserByEmail = async (email) => {
-    const [rows] = await pool.query('SELECT * FROM user WHERE email = ?', [email]);
+const findUserByUsername = async (username) => {
+    const [rows] = await pool.query('SELECT * FROM user WHERE username = ?', [email]);
     return rows[0];
 };
 

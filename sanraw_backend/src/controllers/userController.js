@@ -2,14 +2,14 @@ const userService = require('../services/userService');
 
 const createUser = async (req, res) => {
     try {
-        const { first_name, last_name, email, password, role } = req.body;
+        const { first_name, last_name, username, password, role } = req.body;
         // Default role to 'employee' if not provided
         const userRole = role || 'employee';
 
         if (!first_name || !last_name || !email || !password) {
-            return res.status(400).json({ message: 'Name, email, and password are required' });
+            return res.status(400).json({ message: 'Name, username, and password are required' });
         }
-        await userService.createUser({ first_name, last_name, email, password, role: userRole });
+        await userService.createUser({ first_name, last_name, username, password, role: userRole });
         res.status(201).json({ message: 'User created successfully' });
     } catch (err) {
         res.status(400).json({ message: err.message });

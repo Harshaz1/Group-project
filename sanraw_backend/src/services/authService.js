@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const db = require('../config/db');
 
-const login = async (email, password) => {
-    const user = await userModel.findUserByEmail(email);
+const login = async (username, password) => {
+    const user = await userModel.findUserByUsername(username);
     if (!user) {
         throw new Error('Invalid credentials');
     }
@@ -24,7 +24,7 @@ const login = async (email, password) => {
     // Record Login History
     await userModel.logLogin(user.id);
 
-    return { token, user: { id: user.id, email: user.email, role: user.role } };
+    return { token, user: { id: user.id, username: user.username, role: user.role } };
 };
 
 const changePassword = async (email, currentPassword, newPassword) => {

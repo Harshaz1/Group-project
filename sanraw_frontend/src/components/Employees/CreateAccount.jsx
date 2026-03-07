@@ -26,7 +26,7 @@ const StyledInput = styled(TextField)({
 const CreateAccount = ({ onAccountCreated }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('employee'); // Default to employee
@@ -35,7 +35,7 @@ const CreateAccount = ({ onAccountCreated }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!firstName || !lastName || !email || !password || !confirmPassword) {
+        if (!firstName || !lastName || !username || !password || !confirmPassword) {
             return toast.error("All fields are required!");
         }
 
@@ -56,7 +56,7 @@ const CreateAccount = ({ onAccountCreated }) => {
                 body: JSON.stringify({
                     first_name: firstName,
                     last_name: lastName,
-                    email,
+                    username: username,
                     password,
                     role
                 }),
@@ -69,7 +69,7 @@ const CreateAccount = ({ onAccountCreated }) => {
                 // Clear form
                 setFirstName('');
                 setLastName('');
-                setEmail('');
+                setUsername('');
                 setPassword('');
                 setConfirmPassword('');
                 setRole('employee');
@@ -107,11 +107,11 @@ const CreateAccount = ({ onAccountCreated }) => {
 
             <StyledInput
                 fullWidth
-                type="email"
-                label="Email Address"
+                type="text"
+                label="Username"
                 variant="outlined"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
             />
 
             <StyledInput
