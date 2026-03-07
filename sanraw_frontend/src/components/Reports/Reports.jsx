@@ -40,8 +40,8 @@ const Reports = () => {
                 >
                     <Tab label="Sales Report" sx={{ fontWeight: 'bold' }} />
                     <Tab label="Outstanding Credit" sx={{ fontWeight: 'bold' }} />
-                    <Tab label="Credit Collections" sx={{ fontWeight: 'bold' }} />
-                    <Tab label="Purchase Report" sx={{ fontWeight: 'bold' }} />
+                    {/* <Tab label="Credit Collections" sx={{ fontWeight: 'bold' }} />
+                    <Tab label="Purchase Report" sx={{ fontWeight: 'bold' }} /> */}
                     <Tab label="Inventory Report" sx={{ fontWeight: 'bold' }} />
                 </Tabs>
             </Paper>
@@ -49,9 +49,9 @@ const Reports = () => {
             <Box sx={{ mt: 2 }}>
                 {tabIndex === 0 && <SalesReports />}
                 {tabIndex === 1 && <CreditReports />}
-                {tabIndex === 2 && <CreditPaymentReports />}
-                {tabIndex === 3 && <PurchaseReports />}
-                {tabIndex === 4 && <InventoryReports />}
+                {/* {tabIndex === 2 && <CreditPaymentReports />}
+                {tabIndex === 3 && <PurchaseReports />} */}
+                {tabIndex === 2 && <InventoryReports />}
             </Box>
         </Container>
     );
