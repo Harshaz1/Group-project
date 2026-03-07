@@ -95,7 +95,7 @@ const StyledInput = styled(TextField)({
 
 const Login = () => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
@@ -106,7 +106,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!email || !password) {
+        if (!username || !password) {
             return toast.error("Please fill in all fields");
         }
 
@@ -116,7 +116,7 @@ const Login = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email:email.trim(), password:password.trim() }),
+                body: JSON.stringify({ username:username.trim(), password:password.trim() }),
             });
 
             const data = await response.json();
@@ -162,9 +162,9 @@ const Login = () => {
 
                         <StyledInput
                             fullWidth
-                            placeholder="User Name"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Enter Username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
 
                         <StyledInput

@@ -6,7 +6,7 @@ const login = async (req, res) => {
         if (!username || !password) {
             return res.status(400).json({ message: 'Username and password required' });
         }
-        const result = await authService.login(email, password);
+        const result = await authService.login(username, password);
         res.json(result);
     } catch (err) {
         res.status(401).json({ message: err.message });

@@ -10,17 +10,17 @@ const createUser = async (userData) => {
 };
 
 const findUserByUsername = async (username) => {
-    const [rows] = await pool.query('SELECT * FROM user WHERE username = ?', [email]);
+    const [rows] = await pool.query('SELECT * FROM user WHERE username = ?', [username]);
     return rows[0];
 };
 
 const findUserById = async (id) => {
-    const [rows] = await pool.query('SELECT id, first_name, last_name, email, role, profile_image, phone_number, recovery_email, status, created_at FROM user WHERE id = ?', [id]);
+    const [rows] = await pool.query('SELECT id, first_name, last_name, username, role, profile_image, phone_number, recovery_email, status, created_at FROM user WHERE id = ?', [id]);
     return rows[0];
 };
 
 const getAllUsers = async () => {
-    const [rows] = await pool.query('SELECT id, first_name, last_name, email, role, profile_image, phone_number, recovery_email, status, created_at FROM user');
+    const [rows] = await pool.query('SELECT id, first_name, last_name, username, role, profile_image, phone_number, recovery_email, status, created_at FROM user');
     return rows;
 };
 
@@ -50,9 +50,9 @@ const updateUser = async (id, userData) => {
         fields.push('profile_image = ?');
         params.push(profile_image);
     }
-    if (email !== undefined) {
-        fields.push('email = ?');
-        params.push(email);
+    if (username !== undefined) {
+        fields.push('username = ?');
+        params.push(username);
     }
     if (password_hash !== undefined) {
         fields.push('password_hash = ?');
@@ -119,7 +119,7 @@ const clearLoginHistory = async (userId) => {
 
 module.exports = {
     createUser,
-    findUserByEmail,
+    findUserByUsername,
     findUserById,
     getAllUsers,
     updateUser,
