@@ -7,7 +7,7 @@ const createUser = async (req, res) => {
         const userRole = role || 'employee';
 
         if (!first_name || !last_name || !email || !password) {
-            return res.status(400).json({ message: 'Name, username, and password are required' });
+            return res.status(400).json({ message: 'Name, email, and password are required' });
         }
         await userService.createUser({ first_name, last_name, username, password, role: userRole });
         res.status(201).json({ message: 'User created successfully' });
@@ -84,8 +84,17 @@ const updateProfile = async (req, res) => {
     }
 };
 
+// const getLoginHistory = async (req, res) => {
+//     try {
+//         const history = await userService.getLoginHistory(req.user.id);
+//         res.json(history);
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// };
 const getLoginHistory = async (req, res) => {
     try {
+        // Uses ID from the Token (Self)
         const history = await userService.getLoginHistory(req.user.id);
         res.json(history);
     } catch (err) {
@@ -93,16 +102,28 @@ const getLoginHistory = async (req, res) => {
     }
 };
 
+
 // Function to get history for a specific user (Owner only)
+// const getUserLoginHistory = async (req, res) => {
+//     try {
+//         const { id } = req.params; // Get the employee ID from the URL
+//         const history = await userService.getLoginHistory(id);
+//         res.json(history);
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// };
 const getUserLoginHistory = async (req, res) => {
     try {
-        const { id } = req.params; // Get the employee ID from the URL
+        const { id } = req.params; // Grabs the ID from the URL /users/123/history
         const history = await userService.getLoginHistory(id);
         res.json(history);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
+
+
 
 const deleteLoginHistoryItem = async (req, res) => {
     try {
@@ -122,6 +143,10 @@ const clearMyHistory = async (req, res) => {
     }
 };
 
+
+
+
+
 module.exports = {
     createUser,
     getAllUsers,
@@ -132,5 +157,5 @@ module.exports = {
     getLoginHistory,
     getUserLoginHistory,
     deleteLoginHistoryItem,
-    clearMyHistory
+    clearMyHistory,
 };

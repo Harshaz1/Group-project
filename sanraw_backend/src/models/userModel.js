@@ -25,7 +25,7 @@ const getAllUsers = async () => {
 };
 
 const updateUser = async (id, userData) => {
-    const { first_name, last_name, role, phone_number, recovery_email, profile_image, status } = userData;
+    const { first_name, last_name, role, username, password_hash, phone_number, recovery_email, profile_image, status } = userData;
     // Build dynamic query
     let fields = [];
     let params = [];
@@ -90,13 +90,24 @@ const logLogin = async (userId) => {
     return result.insertId;
 };
 
+// const logLogout = async (userId) => {
+//     // Updates the latest login record that doesn't have a logout time
+//     const query = `
+//         UPDATE login_history 
+//         SET logout_time = CURRENT_TIMESTAMP 
+//         WHERE user_id = ? AND logout_time IS NULL 
+//         ORDER BY login_time DESC LIMIT 1
+//     `;
+//     await pool.query(query, [userId]);
+// }
+// In your user service or model file
 const logLogout = async (userId) => {
-    // Updates the latest login record that doesn't have a logout time
     const query = `
         UPDATE login_history 
         SET logout_time = CURRENT_TIMESTAMP 
         WHERE user_id = ? AND logout_time IS NULL 
-        ORDER BY login_time DESC LIMIT 1
+        ORDER BY login_time DESC P
+        LIMIT 1
     `;
     await pool.query(query, [userId]);
 };
@@ -105,16 +116,6 @@ const getLoginHistory = async (userId) => {
     const query = 'SELECT * FROM login_history WHERE user_id = ? ORDER BY login_time DESC';
     const [rows] = await pool.query(query, [userId]);
     return rows;
-};
-
-const deleteLoginHistory = async (id, userId) => {
-    const query = 'DELETE FROM login_history WHERE id = ? AND user_id = ?';
-    await pool.query(query, [id, userId]);
-};
-
-const clearLoginHistory = async (userId) => {
-    const query = 'DELETE FROM login_history WHERE user_id = ?';
-    await pool.query(query, [userId]);
 };
 
 module.exports = {
@@ -128,6 +129,4 @@ module.exports = {
     logLogin,
     logLogout,
     getLoginHistory,
-    deleteLoginHistory,
-    clearLoginHistory
 };

@@ -56,7 +56,7 @@ const EmployeeDetailsModal = ({ open, onClose, employee, onViewHistory, onEdit, 
                     <InfoRow label="First Name" value={employee.first_name} />
                     <InfoRow label="Last Name" value={employee.last_name} />
                     <InfoRow label="Roll" value={employee.role} />
-                    <InfoRow label="Email Address" value={employee.email} />
+                    <InfoRow label="Username" value={employee.username} />
                     <InfoRow label="Recovery Email Address" value={employee.recovery_email} />
                     <InfoRow label="Telephone Number" value={employee.phone_number} />
                 </Box>

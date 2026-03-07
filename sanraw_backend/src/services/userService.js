@@ -52,6 +52,4 @@ module.exports = {
     updateUser,
     deleteUser,
     getLoginHistory: userModel.getLoginHistory,
-    deleteLoginHistory: userModel.deleteLoginHistory,
-    clearLoginHistory: userModel.clearLoginHistory
 };

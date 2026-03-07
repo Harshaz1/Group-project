@@ -51,7 +51,7 @@ const Employees = () => {
         id: '',
         first_name: '',
         last_name: '',
-        email: '',      
+        username: '',      
         password: '',   
         phone_number: '',
         status: ''
@@ -137,7 +137,7 @@ const Employees = () => {
             id: employee.id,
             first_name: employee.first_name || '',
             last_name: employee.last_name || '',
-            email: employee.email || '', // Populate current email
+            username: employee.username || '', // Populate current email
             password: '',                // Keep password empty initially
             phone_number: employee.phone_number || '',
             status: employee.status || 'active'
@@ -192,7 +192,7 @@ const Employees = () => {
     // Filter and Pagination
     const filteredEmployees = employees.filter(emp =>
         (emp.first_name + ' ' + emp.last_name).toLowerCase().includes(searchTerm.toLowerCase()) ||
-        emp.email.toLowerCase().includes(searchTerm.toLowerCase())
+        emp.username.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Limit to 10 per page (just showing first 10 for simple list as requested "only show ten")
@@ -307,10 +307,10 @@ const Employees = () => {
                             onChange={(e) => setEditEmployeeData({ ...editEmployeeData, last_name: e.target.value })}
                         />
                         <TextField
-                            label="Email (Username)"
+                            label="Username"
                             fullWidth
-                            value={editEmployeeData.email}
-                            onChange={(e) => setEditEmployeeData({ ...editEmployeeData, email: e.target.value })}
+                            value={editEmployeeData.username}
+                            onChange={(e) => setEditEmployeeData({ ...editEmployeeData, username: e.target.value })}
                         />
                         <TextField
                             label="Reset Password"

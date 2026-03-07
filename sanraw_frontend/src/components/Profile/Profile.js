@@ -118,6 +118,24 @@ const Profile = () => {
         setEditData({ ...editData, [e.target.name]: e.target.value });
     };
 
+    const handleLogout = async () => {
+        const token = localStorage.getItem('token');
+        
+        try {
+            // Call backend to log the time
+            await fetch(`${API_URL}/users/logout`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+        } catch (error) {
+            console.error("Logout log failed", error);
+        } finally {
+            // ALWAYS clear token and redirect last
+            localStorage.removeItem('token');
+            navigate('/login');
+        }
+    };
+    
     const handleSaveProfile = async () => {
         const token = localStorage.getItem('token');
         try {
