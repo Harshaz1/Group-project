@@ -248,7 +248,9 @@ const Inventory = () => {
             <TableRow>
                 <TableCell style={{ fontWeight: 'bold' }}>Name</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Price (LKR)</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Stock</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>
+                    Stock {categoryTab === 'paddy' ? '(kg)' : ''}
+                </TableCell>
                 {categoryTab === 'chemicals' && <TableCell style={{ fontWeight: 'bold' }}>Expiry Date</TableCell>}
             </TableRow>
         </TableHead>
@@ -310,7 +312,7 @@ const Inventory = () => {
                     }
 
                     <TextField required type="number" label="Price" fullWidth value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
-                    <TextField required type="number" label="Initial Stock" fullWidth value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} />
+                    <TextField required type="number" label={categoryTab === 'paddy' ? "Initial Stock (kg)" : "Initial Stock"} fullWidth value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} />
 
                     {categoryTab === 'chemicals' &&
                         <TextField required type="date" label="Expire Date" InputLabelProps={{ shrink: true }} fullWidth value={formData.expire_date} onChange={(e) => setFormData({ ...formData, expire_date: e.target.value })} />
@@ -441,7 +443,7 @@ const Inventory = () => {
                             />
                         }
                         <TextField label="Price" type="number" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} fullWidth />
-                        <TextField label="Stock" type="number" value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} fullWidth />
+                        <TextField label={categoryTab === 'paddy' ? "Stock (kg)" : "Stock"} type="number" value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} fullWidth />
                         {categoryTab === 'chemicals' &&
                             <TextField label="Expire Date" type="date" InputLabelProps={{ shrink: true }} value={formData.expire_date} onChange={(e) => setFormData({ ...formData, expire_date: e.target.value })} fullWidth />
                         }
