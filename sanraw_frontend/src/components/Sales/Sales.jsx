@@ -59,8 +59,8 @@ const Sales = () => {
                     }}
                 >
                     <StyledTab label="Sells" />
-                    <StyledTab label="Buy & Suppliers" />
-                    <StyledTab label="Inventory Buy & Supplier Bills" />
+                    {/* <StyledTab label="Buy & Suppliers" />
+                    <StyledTab label="Inventory Buy & Supplier Bills" /> */}
                     <StyledTab label="Credit" />
                     <StyledTab label="Cash" />
                     <StyledTab label="Recent Bill" />
@@ -70,11 +70,11 @@ const Sales = () => {
             {/* Content Area */}
             <Container maxWidth="lg">
                 {tabValue === 0 && <SellsTab />}
-                {tabValue === 1 && <BuyTab />}
-                {tabValue === 2 && <SupplierBillsTab />}
-                {tabValue === 3 && <CreditTab />}
-                {tabValue === 4 && <CashTab />}
-                {tabValue === 5 && <RecentBillTab />}
+                {/* {tabValue === 1 && <BuyTab />}
+                {tabValue === 2 && <SupplierBillsTab />} */}
+                {tabValue === 1 && <CreditTab />}
+                {tabValue === 2 && <CashTab />}
+                {tabValue === 3 && <RecentBillTab />}
             </Container>
         </Box>
     );
